@@ -1,0 +1,570 @@
+{
+  "dataset_path": "C:\\Users\\89692\\Desktop\\SEU_about\\SEU_about\\Career\\RAG_project\\all-in-rag\\code\\C8\\evaluation_dataset.json",
+  "num_samples": 12,
+  "retrieval_summary": {
+    "avg_recall": 1.0,
+    "avg_precision": 0.4305,
+    "avg_mrr": 0.8889
+  },
+  "generation_summary": {
+    "avg_factual_accuracy": {
+      "avg_score": 5,
+      "avg_normalized_score": 1.0
+    },
+    "avg_faithfulness": {
+      "avg_score": 5,
+      "avg_normalized_score": 1.0
+    },
+    "avg_relevance": {
+      "avg_score": 5,
+      "avg_normalized_score": 1.0
+    }
+  },
+  "samples": [
+    {
+      "question": "手工水饺怎么做？",
+      "metadata": {
+        "dish_name": "手工水饺",
+        "category": "主食",
+        "difficulty": "非常困难",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "手工水饺 做法 详细步骤 饺子皮 饺子馅 和面 擀皮 包法 煮法 家常 难度中等 传统手工 无特殊健康限制",
+      "expected_relevant_dishes": [
+        "手工水饺"
+      ],
+      "retrieved_dishes": [
+        "手工水饺",
+        "鸡蛋羹",
+        "速冻水饺"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.3333,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 3
+      },
+      "answer": "手工水饺是一道“主食级”硬菜，难度被标为“非常困难”，初学者需预留 3 小时。下面按步骤拆解，确保你能一步步完成。\n\n一、关键食材（单人 20 只量）\n• 饺子皮：面粉 200 g、冷水 150 ml、芝麻香油 2–3 ml  \n• 饺子馅：瘦肉末 250 g、肥肉末 20 g（可省）、姜 3 g、葱 15 g、韭菜适量（切 3 mm 以下）、盐 3 g、蚝油 2 ml、生抽 2 ml、香油 2 ml、鸡蛋 1 个（只用蛋清）\n\n二、操作步骤\n1. 和面醒面  \n   ① 盆里放面粉，中间挖洞，倒入芝麻香油。  \n   ② 分 4–5 次加入冷水，搅成碎末状略干面团后停止加水。  \n   ③ 用手压实面团，做到“面光盆光”。  \n   ④ 25 ℃室温醒面 45 min（盆倒扣防干皮）。\n\n2. 做皮  \n   ① 醒好的面团搓条→合团→再搓条，重复 3 次。  \n   ② 擀成长条，切 20 等份，搓成 3–3.5 cm 小球。  \n   ③ 压扁后撒干粉防粘，擀成直径约 8 cm、厚约 2 mm 的圆片，中间略厚 1 mm。\n\n3. 拌馅  \n   ① 猪肉（肥瘦分开）剁末；姜、葱切末。  \n   ② 韭菜洗净切极碎。  \n   ③ 肉末+葱姜末+韭菜混合，加蚝油、生抽、香油各 2 ml，再加蛋清，顺一个方向搅至起胶。  \n   ④ 静置 30 min 入味。\n\n4. 包饺子  \n   ① 左手托皮，右手筷子取馅（约占皮直径 1/2）。  \n   ② 沿圆周捏合，确保不漏即可，不必捏花。\n\n5. 煮饺子  \n   ① 锅水加到 3/4 高度，大火煮沸。  \n   ② 下饺子后转中火，水再沸时加 50 ml 冷水；重复两次。  \n   ③ 第三次水开后加最后一次冷水，水再沸转小火 60 s 即可捞出。  \n   全程不盖锅盖，防止破皮。\n\n三、蘸料（可选）\n• 黑醋 10–20 ml + 姜丝 + 香油 1–3 滴 + 蒜泥（3 瓣/人），调匀即可。注意蒜味残留。\n\n提示：若时间紧或技术不熟，可先做少量练习，逐步掌握擀皮与包馅手感。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有用量、步骤、时间与证据完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "全部内容均可在证据1中找到对应描述，无编造"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "完整覆盖用户问题“手工水饺怎么做”所需的所有信息，无冗余"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "凉皮需要什么食材？",
+      "metadata": {
+        "dish_name": "凉皮",
+        "category": "其他",
+        "difficulty": "中等",
+        "question_type": "ingredients"
+      },
+      "route_type": "detail",
+      "rewritten_query": "凉皮 食材清单 原料 配料 做法 家常 简单 夏季 凉菜 低油 低热量 素食 小吃",
+      "expected_relevant_dishes": [
+        "凉皮"
+      ],
+      "retrieved_dishes": [
+        "凉皮",
+        "皮蛋瘦肉粥"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 2
+      },
+      "answer": "凉皮是一道清爽开胃、适合夏季的凉拌主食。  \n所需关键食材如下：\n\n主料  \n• 凉皮（市售成品）  \n• 面筋（与凉皮配套）\n\n蔬菜  \n• 黄瓜  \n• 绿豆芽\n\n调味料  \n• 盐、鸡精、蚝油、生抽、老抽、香油、香醋  \n• 芝麻酱（原味最佳）\n\n辅料  \n• 大蒜（捣成蒜泥）\n\n以上即为制作家常凉皮所需的全部食材。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "列出的所有食材与参考答案和检索证据完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有食材均直接来自检索证据，无编造或扩展"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“需要什么食材”，无冗余步骤或无关信息"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "吐司果酱的制作步骤是什么？",
+      "metadata": {
+        "dish_name": "吐司果酱",
+        "category": "早餐",
+        "difficulty": "非常简单",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "吐司果酱 制作步骤 早餐 简单 烘焙 低糖 自制 涂抹酱",
+      "expected_relevant_dishes": [
+        "吐司果酱"
+      ],
+      "retrieved_dishes": [
+        "吐司果酱",
+        "鸡蛋羹"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 2
+      },
+      "answer": "吐司果酱是一款“懒人级”早餐，2 分钟就能完成，难度极低，适合赶时间的人。\n\n关键食材  \n- 新鲜吐司 2 片  \n- 果酱（用量足够涂满一面吐司即可）\n\n制作步骤  \n1. 把两片吐司放进面包机，设定好档位。  \n2. 2 分钟后吐司自动弹出，先取出一片。  \n3. 在取出的那片吐司上均匀涂满果酱。  \n4. 盖上另一片吐司，用餐巾纸一包即可带走或当场享用。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有事实（食材、用量、步骤、时间）与参考答案及证据1完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "回答内容全部可在证据1中找到对应描述，无编造信息"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“制作步骤”问题，步骤清晰完整，无冗余"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "咖喱炒蟹怎么做？",
+      "metadata": {
+        "dish_name": "咖喱炒蟹",
+        "category": "水产",
+        "difficulty": "困难",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "咖喱炒蟹 做法 食谱 步骤 用料 烹饪方式 炒 难度 口味 咖喱味 海鲜 晚餐",
+      "expected_relevant_dishes": [
+        "咖喱炒蟹"
+      ],
+      "retrieved_dishes": [
+        "咖喱炒蟹",
+        "日式咖喱饭"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 2
+      },
+      "answer": "咖喱炒蟹是一道东南亚风味浓郁的海鲜硬菜，蟹肉饱满、咖喱香浓，配椰浆和蛋液挂汁，口感层次丰富。以下做法按 1 人份给出，可按需倍增。\n\n关键食材  \n- 青蟹（肉蟹）1 只 ≈ 300 g  \n- 咖喱块 15 g（推荐乐惠蟹黄咖喱）  \n- 椰浆 100 ml  \n- 鸡蛋 1 个（只用蛋清）  \n- 洋葱 200 g  \n- 大蒜 5 瓣  \n- 生粉（淀粉）适量  \n- 食用油 30 ml（分两次用）  \n- 开水 300 ml  \n\n步骤  \n1. 处理螃蟹  \n   ‑ 掀盖，将蟹体对半切开；蟹钳用刀背轻敲裂。  \n   ‑ 切口、蟹钳薄薄蘸一层生粉；蟹盖内撒 5 g 生粉盖住蟹黄，备用。  \n\n2. 备料  \n   ‑ 洋葱、大蒜分别切碎；鸡蛋取蛋清；烧好 300 ml 开水。  \n\n3. 煎蟹  \n   ‑ 锅中倒 20 ml 油，中高火烧 10 秒。  \n   ‑ 蟹切口朝下放入，煎 20 秒封住蟹黄，再翻面各煎 10 秒，盛出。  \n   ‑ 蟹盖入锅，用勺舀热油泼淋蟹盖内 20 秒，定型后取出。  \n\n4. 炒咖喱  \n   ‑ 不洗锅，补 10 ml 油，大火烧至微冒烟。  \n   ‑ 下蒜末、洋葱碎，炒 10 秒。  \n   ‑ 放咖喱块，炒 10 秒至融化。  \n\n5. 焖煮  \n   ‑ 倒入煎好的螃蟹翻炒均匀，加 300 ml 开水，盖锅焖 3 分钟。  \n\n6. 挂汁  \n   ‑ 开盖，倒入椰浆和蛋清，立即关火。  \n   ‑ 持续翻炒至酱汁浓稠裹匀蟹身即可装盘。  \n\n提示  \n- 蟹黄易散，煎封步骤不可省。  \n- 关火后再加椰浆和蛋清，可避免过火结块，酱汁更顺滑。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有原料、用量、步骤与参考答案完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "全部内容均可在检索证据1中找到对应描述，无编造"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“怎么做”，完整给出原料、用量及详细步骤，无冗余"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "奶油蘑菇汤需要什么食材？",
+      "metadata": {
+        "dish_name": "奶油蘑菇汤",
+        "category": "汤品",
+        "difficulty": "非常简单",
+        "question_type": "ingredients"
+      },
+      "route_type": "detail",
+      "rewritten_query": "奶油蘑菇汤 食材清单 西餐汤品 奶油味 中等难度 煮制",
+      "expected_relevant_dishes": [
+        "奶油蘑菇汤"
+      ],
+      "retrieved_dishes": [
+        "奶油蘑菇汤",
+        "鸡蛋羹"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 2
+      },
+      "answer": "奶油蘑菇汤是一道非常简单、奶香浓郁的汤品，适合 1–2 人分享。\n\n所需关键食材（每份用量）  \n- 白蘑菇 200 克  \n- 洋葱 50 克  \n- 黄油 15 克  \n- 面粉 10 克  \n- 牛奶 200 毫升  \n- 淡奶油 30 毫升  \n- 清水 100 毫升  \n- 盐 2 克  \n- 黑胡椒碎 1 克",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "列出的全部食材及用量与参考答案和证据完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有信息均直接来自检索证据，无编造或扩展"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“需要什么食材”并给出每份用量，完全聚焦问题"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "反沙芋头的制作步骤是什么？",
+      "metadata": {
+        "dish_name": "反沙芋头",
+        "category": "甜品",
+        "difficulty": "中等",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "反沙芋头 制作步骤 详细做法 传统甜品 潮汕小吃 油炸挂糖 零失败 家庭做法",
+      "expected_relevant_dishes": [
+        "反沙芋头"
+      ],
+      "retrieved_dishes": [
+        "反沙芋头",
+        "鸡蛋羹"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 2
+      },
+      "answer": "反沙芋头是潮汕经典甜品，外酥内粉、糖霜沙沙作响，20 分钟即可完成，难度中等。\n\n制作步骤  \n1. 备料  \n   - 荔浦芋头 200 g，切成长粗条（耐炒不易碎）。  \n   - 白砂糖 30 g + 清水 15 g（2:1）。  \n   - 葱少许（切末）。  \n\n2. 炸芋头  \n   - 锅中倒油，油量需没过芋头；油温至筷子插入冒小泡。  \n   - 下芋头炸至浮起、微黄，筷子能轻松戳透即可捞出沥油。  \n\n3. 炒糖反沙  \n   - 另起锅，倒入糖和水，小火加热至糖液微冒小泡、颜色未变。  \n   - 立刻关火，加入葱花和炸好的芋头，快速翻炒至温度下降，糖霜逐渐析出、裹满芋头即成。  \n\n4. 装盘享用  \n   - 趁热上桌，小心烫嘴；配茶尤佳。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有步骤、用量、火候描述均与证据完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "内容全部来自证据1，无编造或外部扩展"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答制作步骤，重点清晰，无冗余"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "凉拌油麦菜怎么做？",
+      "metadata": {
+        "dish_name": "凉拌油麦菜",
+        "category": "素菜",
+        "difficulty": "非常简单",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "凉拌油麦菜 做法 步骤 低油 健康 快手 家常菜 夏季 午餐 晚餐 素食 清爽 低难度 凉拌 冷盘",
+      "expected_relevant_dishes": [
+        "凉拌油麦菜"
+      ],
+      "retrieved_dishes": [
+        "凉拌油麦菜",
+        "日式咖喱饭",
+        "凉拌莴笋"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.3333,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 3
+      },
+      "answer": "凉拌油麦菜是一道非常简单的素菜，清爽开胃，适合 1-2 人小份食用。\n\n关键食材  \n- 油麦菜 1 颗（约 200 g）  \n- 芝麻酱 10 ml  \n- 酱油 5 ml  \n- 醋 15 ml  \n- 蚝油 10 ml  \n- 白糖 5 g  \n- 香油 5 ml  \n- 蒜 2 头  \n- 盐 适量  \n\n做法步骤  \n1. 备料：蒜拍碎切末；油麦菜洗净切段，每段不超过 4 cm。  \n2. 调酱：将蒜末、醋、酱油、芝麻酱、香油、白糖、蚝油放入碗中，搅拌均匀成酱汁。  \n3. 拌菜：把油麦菜段放入大盆，倒入酱汁，充分拌匀即可。  \n\n提示  \n- 芝麻酱可用花生酱代替；务必拌匀，味道更佳。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有食材、用量及步骤均与证据1完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "回答内容全部直接来源于证据1，无编造或超出证据的信息"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "完整回应“怎么做”问题，重点突出做法步骤，无冗余"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "乡村啤酒鸭需要什么食材？",
+      "metadata": {
+        "dish_name": "乡村啤酒鸭",
+        "category": "荤菜",
+        "difficulty": "困难",
+        "question_type": "ingredients"
+      },
+      "route_type": "detail",
+      "rewritten_query": "乡村啤酒鸭 食材清单 鸭肉 啤酒 配料 调料 家常菜 晚餐 中等难度 炖 烧 传统口味",
+      "expected_relevant_dishes": [
+        "乡村啤酒鸭"
+      ],
+      "retrieved_dishes": [
+        "乡村啤酒鸭",
+        "啤酒鸭"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 2
+      },
+      "answer": "乡村啤酒鸭是一道用啤酒炖煮鸭肉的浓香荤菜，成品鲜香带啤酒清香，难度较高但 1 小时可完成。  \n所需关键食材如下：\n\n主料  \n- 鸭肉：半只，约 1 kg（剁成小块）  \n- 啤酒：1000 ml（可用 2 罐 500 ml 装）\n\n蔬菜与配料  \n- 青椒 2 条  \n- 红椒 1 条  \n- 大蒜 4 颗（拍散）  \n- 生姜 3 cm 长（拍散）  \n- 小米椒 3 颗（可选）  \n- 蒜苗 2 根（切段）  \n- 大葱 2 根（1 根切段焯水用，1 根备用）\n\n香料  \n- 草果 2 颗（拍散去籽）  \n- 桂皮 1 小片（约 4 cm）  \n- 八角 3 颗  \n- 香叶 3 片  \n- 干辣椒 6 条（可选）  \n- 花椒 约 30 颗（炒制时用）\n\n基础调味料  \n- 盐 3 g  \n- 生抽 10 ml  \n- 老抽 5 ml  \n- 料酒 20 ml（焯水用）  \n- 花生油 60 ml（炒制用）\n\n以上即为乡村啤酒鸭的全部关键食材。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "列出的所有食材、用量及备注均与参考答案完全一致，无遗漏或错误。"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有食材信息均直接来源于检索证据1，无编造或扩展。"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“需要什么食材”，列出全部关键食材并给出用量，完全聚焦问题。"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "油酥的制作步骤是什么？",
+      "metadata": {
+        "dish_name": "油酥",
+        "category": "调料",
+        "difficulty": "简单",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "油酥 制作步骤 详细做法 中式面点 烘焙基础 低难度",
+      "expected_relevant_dishes": [
+        "油酥"
+      ],
+      "retrieved_dishes": [
+        "油酥",
+        "鸡蛋羹",
+        "烙饼"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.3333,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 3
+      },
+      "answer": "油酥是一种简单却极实用的“层酥”调料，烙饼时抹一点，能让饼层层分明、外酥里软。下面给出可立即上手的制作步骤。\n\n油酥关键食材  \n- 面粉  \n- 食用油  \n- 盐  \n\n制作步骤  \n1. 配比：按要做的饼数计算  \n   • 油 ≈ 饼张数 × 10 ml  \n   • 盐 ≈ 饼张数 ÷ 2 g  \n   • 面粉 ≈ 饼张数 ÷ 0.13 g  \n\n2. 混合干料：把面粉和盐倒入小碗，拌匀。  \n\n3. 热油：将油加热到约 200 ℃（刚起烟即可）。  \n\n4. 冲油：把热油一次性倒入面粉中，立即用筷子快速搅拌，直到没有干粉、呈均匀糊状即可。  \n\n至此油酥完成，可直接用于后续烙饼等操作。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有事实（原料、用量公式、步骤顺序、油温200℃、搅拌成糊状）均与证据1完全一致，无遗漏或错误。"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "回答内容全部来自证据1，未引入任何额外信息或编造。"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“油酥的制作步骤”，步骤清晰完整，无冗余信息。"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "B52轰炸机怎么做？",
+      "metadata": {
+        "dish_name": "B52轰炸机",
+        "category": "饮品",
+        "difficulty": "中等",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "B52轰炸机鸡尾酒 配方 做法 步骤 调酒 烈酒 咖啡利口酒 百利甜 橙味利口酒 分层技巧 难度 派对 聚会",
+      "expected_relevant_dishes": [
+        "B52轰炸机"
+      ],
+      "retrieved_dishes": [
+        "B52轰炸机",
+        "日式咖喱饭"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.5,
+        "mrr": 1.0,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 2
+      },
+      "answer": "B52轰炸机是一款“点火后一口闷”的经典分层短饮鸡尾酒，先冷后热的“冰火两重天”体验是它的灵魂。\n\n关键原料（每杯 30 ml）\n- 甘露咖啡酒 10 ml  \n- 爱尔兰百利甜酒 10 ml  \n- 蓝天原味伏特加 10 ml  \n\n必备工具\n- 利口酒杯（子弹杯）  \n- 吧勺  \n- 打火机  \n- 短吸管（可选，女士常用）  \n\n制作步骤\n1. 在利口酒杯底层缓缓倒入甘露咖啡酒至杯子的 1/3（约 10 ml）。  \n2. 用吧勺背贴着杯壁，极慢地引流倒入百利甜酒，同样到 2/3 处（约 10 ml），保持两层清晰。  \n3. 继续用吧勺背，轻缓地倒入伏特加至杯口下缘（约 10 ml），形成第三层。  \n4. 打火机快速在杯口掠过加热，随后点火——杯口会出现淡蓝色火苗。  \n5. 饮用：  \n   • 刺激版：待火苗稳定后，直接一口倒入口中，让火在口腔内熄灭。  \n   • 安全版：将短吸管插入火焰中央，迅速一口气吸完；因管内缺氧，火苗会立即熄灭。  \n\n注意：避免杯口触碰嘴唇，防止烫伤；务必确认周围无易燃物，并在成人监护下操作。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "原料、用量、工具、分层顺序、点火及饮用方式均与证据完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有信息均可直接对应证据，无编造内容"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "完整回应“怎么做”问题，重点突出制作步骤与饮用方式"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "汤面需要什么食材？",
+      "metadata": {
+        "dish_name": "汤面",
+        "category": "主食",
+        "difficulty": "简单",
+        "question_type": "ingredients"
+      },
+      "route_type": "detail",
+      "rewritten_query": "汤面 食材清单 面条 汤底 配料 健康 低油 午餐 高蛋白 鸡蛋 鸡胸肉 牛肉 豆腐 蔬菜",
+      "expected_relevant_dishes": [
+        "汤面"
+      ],
+      "retrieved_dishes": [
+        "手抓饼",
+        "番茄牛肉蛋花汤",
+        "汤面"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.3333,
+        "mrr": 0.3333,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 3
+      },
+      "answer": "汤面食材一览  \n汤面最大的优点就是“想吃什么就放什么”，但为了让新手也能一次成功，下面把食谱里提到的关键食材按“必备 + 可选”两类列给你，照着准备即可。\n\n必备  \n1. 面食：手工面条、龙须面、泡面面饼、粉丝等任何一种你喜欢的形式  \n2. 冷水：200–400 ml（能完全浸没面食即可）\n\n可选（建议荤素搭配，体积大约与面食相当）  \n• 肉类：生或熟的牛、羊、鱼、虾等  \n• 蛋类：鸡蛋、鸭蛋、鹅蛋……  \n• 豆制品：豆块、豆筋、豆腐皮  \n• 蔬菜：生菜、菠菜、油麦菜、青椒、番茄、胡萝卜等  \n• 调味料：盐、胡椒粉、香油等（出锅前按口味添加）\n\n只要备好“面食 + 水”，其余食材按个人喜好自由组合即可。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有列出的食材、用量及分类均与证据3完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "回答内容全部来自证据3，未引入任何额外或编造信息"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“汤面需要什么食材”，并清晰列出必备与可选食材，重点准确"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    },
+    {
+      "question": "半成品意面的制作步骤是什么？",
+      "metadata": {
+        "dish_name": "半成品意面",
+        "category": "其他",
+        "difficulty": "非常简单",
+        "question_type": "detail"
+      },
+      "route_type": "detail",
+      "rewritten_query": "半成品意面 制作步骤 烹饪方式 难度 午餐 晚餐 快手 低油 高蛋白",
+      "expected_relevant_dishes": [
+        "半成品意面"
+      ],
+      "retrieved_dishes": [
+        "手抓饼",
+        "鸡蛋羹",
+        "半成品意面"
+      ],
+      "retrieval_metrics": {
+        "recall": 1.0,
+        "precision": 0.3333,
+        "mrr": 0.3333,
+        "hits": 1,
+        "num_expected": 1,
+        "num_retrieved": 3
+      },
+      "answer": "半成品意面概况  \n这是一份“开袋即烹”的速食意面，只需 2~3 分钟就能完成，难度极低，适合 2 人份 520 g 的包装。\n\n关键食材  \n- 半成品意大利面 1 袋（推荐圃美多）  \n- 附赠酱料包（已含在袋内）  \n- 清水 50 ml  \n\n制作步骤（任选其一即可）\n\n方法一：平底锅  \n1. 平底锅空烧 10 秒预热。  \n2. 倒入 50 ml 清水。  \n3. 把面条整袋内容（含面与酱）倒入锅中，中火翻炒 1 分钟。  \n4. 继续翻炒 1 分钟至酱汁均匀裹面，关火装盘。\n\n方法二：微波炉  \n1. 将面条连同酱料一起放入可微波的盘子。  \n2. 加 50 ml 清水。  \n3. 700 W 微波加热 2 分钟。  \n4. 取出后拌匀即可享用。",
+      "generation_metrics": {
+        "factual_accuracy": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "所有步骤、用量、时间与参考答案完全一致，无遗漏或错误"
+        },
+        "faithfulness": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "内容全部来自检索证据3，未引入任何外部信息"
+        },
+        "relevance": {
+          "score": 5,
+          "normalized_score": 1.0,
+          "reason": "直接回答“制作步骤”，无冗余信息，重点准确"
+        },
+        "judge_mode": "llm_as_judge"
+      }
+    }
+  ]
+}

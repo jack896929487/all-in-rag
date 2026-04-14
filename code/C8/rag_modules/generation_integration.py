@@ -1,39 +1,36 @@
 """
-生成集成模块
+Generation module for C8.
 """
 
-import os
 import logging
-from typing import List
+import os
+from typing import List, Optional
 
-from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_community.chat_models.moonshot import MoonshotChat
 from langchain_core.documents import Document
-from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
 
 logger = logging.getLogger(__name__)
 
+
 class GenerationIntegrationModule:
-    """生成集成模块 - 负责LLM集成和回答生成"""
-    
-    def __init__(self, model_name: str = "kimi-k2-0711-preview", temperature: float = 0.1, max_tokens: int = 2048):
-        """
-        初始化生成集成模块
-        
-        Args:
-            model_name: 模型名称
-            temperature: 生成温度
-            max_tokens: 最大token数
-        """
+    """LLM integration and answer generation."""
+
+    def __init__(
+        self,
+        model_name: str = "kimi-k2-0711-preview",
+        temperature: float = 0.1,
+        max_tokens: int = 2048,
+    ):
         self.model_name = model_name
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.llm = None
         self.setup_llm()
-    
+
     def setup_llm(self):
-        """初始化大语言模型"""
+        """Initialize the LLM client."""
         logger.info(f"正在初始化LLM: {self.model_name}")
 
         api_key = os.getenv("MOONSHOT_API_KEY")
@@ -44,358 +41,289 @@ class GenerationIntegrationModule:
             model=self.model_name,
             temperature=self.temperature,
             max_tokens=self.max_tokens,
-            moonshot_api_key=api_key
+            moonshot_api_key=api_key,
         )
-        
         logger.info("LLM初始化完成")
-    
+
     def generate_basic_answer(self, query: str, context_docs: List[Document]) -> str:
-        """
-        生成基础回答
-
-        Args:
-            query: 用户查询
-            context_docs: 上下文文档列表
-
-        Returns:
-            生成的回答
-        """
+        """Generate a normal grounded answer."""
         context = self._build_context(context_docs)
+        prompt = ChatPromptTemplate.from_template(
+            """
+你是一名专业的食谱问答助手。请严格基于提供的食谱信息回答问题。
 
-        prompt = ChatPromptTemplate.from_template("""
-你是一位专业的烹饪助手。请根据以下食谱信息回答用户的问题。
+用户问题:
+{question}
 
-用户问题: {question}
-
-相关食谱信息:
+食谱证据:
 {context}
 
-请提供详细、实用的回答。如果信息不足，请诚实说明。
+要求:
+1. 优先直接回答用户问题。
+2. 只能依据证据作答，不要编造菜名、食材或做法。
+3. 如果证据不足，明确说明局限。
+4. 语言简洁、实用。
 
-回答:""")
-
-        # 使用LCEL构建链
-        chain = (
-            {"question": RunnablePassthrough(), "context": lambda _: context}
-            | prompt
-            | self.llm
-            | StrOutputParser()
+回答:
+""".strip()
         )
 
-        response = chain.invoke(query)
-        return response
-    
+        chain = prompt | self.llm | StrOutputParser()
+        return chain.invoke({"question": query, "context": context})
+
     def generate_step_by_step_answer(self, query: str, context_docs: List[Document]) -> str:
-        """
-        生成分步骤回答
-
-        Args:
-            query: 用户查询
-            context_docs: 上下文文档列表
-
-        Returns:
-            分步骤的详细回答
-        """
+        """Generate a detailed step-by-step answer."""
         context = self._build_context(context_docs)
+        prompt = ChatPromptTemplate.from_template(
+            """
+你是一名专业的烹饪导师。请基于给定食谱信息，为用户生成清晰、可执行的回答。
 
-        prompt = ChatPromptTemplate.from_template("""
-你是一位专业的烹饪导师。请根据食谱信息，为用户提供详细的分步骤指导。
+用户问题:
+{question}
 
-用户问题: {question}
-
-相关食谱信息:
+食谱证据:
 {context}
 
-请灵活组织回答，建议包含以下部分（可根据实际内容调整）：
+要求:
+1. 先简短说明推荐或菜品概况。
+2. 如果问题涉及做法，按步骤说明。
+3. 如果问题涉及食材，明确列出关键食材。
+4. 不要编造证据中没有的信息。
+5. 如果信息不完整，直接说明。
 
-## 🥘 菜品介绍
-[简要介绍菜品特点和难度]
-
-## 🛒 所需食材
-[列出主要食材和用量]
-
-## 👨‍🍳 制作步骤
-[详细的分步骤说明，每步包含具体操作和大概所需时间]
-
-## 💡 制作技巧
-[仅在有实用技巧时包含。优先使用原文中的实用技巧，如果原文的"附加内容"与烹饪无关或为空，可以基于制作步骤总结关键要点，或者完全省略此部分]
-
-注意：
-- 根据实际内容灵活调整结构
-- 不要强行填充无关内容或重复制作步骤中的信息
-- 重点突出实用性和可操作性
-- 如果没有额外的技巧要分享，可以省略制作技巧部分
-
-回答:""")
-
-        chain = (
-            {"question": RunnablePassthrough(), "context": lambda _: context}
-            | prompt
-            | self.llm
-            | StrOutputParser()
+回答:
+""".strip()
         )
 
-        response = chain.invoke(query)
-        return response
-    
-    def query_rewrite(self, query: str) -> str:
-        """
-        智能查询重写 - 让大模型判断是否需要重写查询
+        chain = prompt | self.llm | StrOutputParser()
+        return chain.invoke({"question": query, "context": context})
 
-        Args:
-            query: 原始查询
+    def query_rewrite(self, query: str, route_type: Optional[str] = None) -> str:
+        """Rewrite the user query into a retrieval-friendly query."""
+        prompt = ChatPromptTemplate.from_template(
+            """
+你是一个 RAG 检索查询改写助手。你的目标不是回答问题，而是把用户问题改写成更适合食谱库检索的查询。
 
-        Returns:
-            重写后的查询或原查询
-        """
-        prompt = PromptTemplate(
-            template="""
-你是一个智能查询分析助手。请分析用户的查询，判断是否需要重写以提高食谱搜索效果。
+输入问题:
+{query}
 
-原始查询: {query}
+路由类型:
+{route_type}
 
-分析规则：
-1. **具体明确的查询**（直接返回原查询）：
-   - 包含具体菜品名称：如"宫保鸡丁怎么做"、"红烧肉的制作方法"
-   - 明确的制作询问：如"蛋炒饭需要什么食材"、"糖醋排骨的步骤"
-   - 具体的烹饪技巧：如"如何炒菜不粘锅"、"怎样调制糖醋汁"
+改写要求:
+1. 保留用户原始意图，不要改变约束。
+2. 明确保留这些信息：菜品目标、用餐场景、健康目标、营养目标、口味偏好、难度、烹饪方式。
+3. 如果是推荐类问题，可以补充有助于检索的关键词，例如“高蛋白、健康、低油、午餐、中饭、增肌、鸡蛋、鸡胸肉、牛肉、豆腐”等，但不要编造具体菜名。
+4. 如果原问题已经很适合检索，可以只做轻微整理。
+5. 输出必须是单行中文检索查询，不要解释。
 
-2. **模糊不清的查询**（需要重写）：
-   - 过于宽泛：如"做菜"、"有什么好吃的"、"推荐个菜"
-   - 缺乏具体信息：如"川菜"、"素菜"、"简单的"
-   - 口语化表达：如"想吃点什么"、"有饮品推荐吗"
-
-重写原则：
-- 保持原意不变
-- 增加相关烹饪术语
-- 优先推荐简单易做的
-- 保持简洁性
-
-示例：
-- "做菜" → "简单易做的家常菜谱"
-- "有饮品推荐吗" → "简单饮品制作方法"
-- "推荐个菜" → "简单家常菜推荐"
-- "川菜" → "经典川菜菜谱"
-- "宫保鸡丁怎么做" → "宫保鸡丁怎么做"（保持原查询）
-- "红烧肉需要什么食材" → "红烧肉需要什么食材"（保持原查询）
-
-请输出最终查询（如果不需要重写就返回原查询）:""",
-            input_variables=["query"]
+改写结果:
+""".strip()
         )
 
-        chain = (
-            {"query": RunnablePassthrough()}
-            | prompt
-            | self.llm
-            | StrOutputParser()
-        )
+        chain = prompt | self.llm | StrOutputParser()
+        rewritten_query = chain.invoke(
+            {
+                "query": query,
+                "route_type": route_type or "unknown",
+            }
+        ).strip()
 
-        response = chain.invoke(query).strip()
-
-        # 记录重写结果
-        if response != query:
-            logger.info(f"查询已重写: '{query}' → '{response}'")
+        if rewritten_query != query:
+            logger.info(f"查询已重写: '{query}' -> '{rewritten_query}'")
         else:
             logger.info(f"查询无需重写: '{query}'")
-
-        return response
-
-
+        return rewritten_query
 
     def query_router(self, query: str) -> str:
-        """
-        查询路由 - 根据查询类型选择不同的处理方式
+        """Route query into list/detail/general."""
+        prompt = ChatPromptTemplate.from_template(
+            """
+请判断用户问题属于以下哪一类，只输出一个标签:
 
-        Args:
-            query: 用户查询
+1. list
+适用于用户要推荐、菜品候选、吃什么、搭配什么。
 
-        Returns:
-            路由类型 ('list', 'detail', 'general')
-        """
-        prompt = ChatPromptTemplate.from_template("""
-根据用户的问题，将其分类为以下三种类型之一：
+2. detail
+适用于用户明确要做法、步骤、食材、制作细节。
 
-1. 'list' - 用户想要获取菜品列表或推荐，只需要菜名
-   例如：推荐几个素菜、有什么川菜、给我3个简单的菜
+3. general
+适用于一般知识、原理、营养或烹饪常识。
 
-2. 'detail' - 用户想要具体的制作方法或详细信息
-   例如：宫保鸡丁怎么做、制作步骤、需要什么食材
+用户问题:
+{query}
 
-3. 'general' - 其他一般性问题
-   例如：什么是川菜、制作技巧、营养价值
-
-请只返回分类结果：list、detail 或 general
-
-用户问题: {query}
-
-分类结果:""")
-
-        chain = (
-            {"query": RunnablePassthrough()}
-            | prompt
-            | self.llm
-            | StrOutputParser()
+输出:
+""".strip()
         )
 
-        result = chain.invoke(query).strip().lower()
-
-        # 确保返回有效的路由类型
-        if result in ['list', 'detail', 'general']:
+        chain = prompt | self.llm | StrOutputParser()
+        result = chain.invoke({"query": query}).strip().lower()
+        if result in {"list", "detail", "general"}:
             return result
-        else:
-            return 'general'  # 默认类型
+        return "general"
 
     def generate_list_answer(self, query: str, context_docs: List[Document]) -> str:
-        """
-        生成列表式回答 - 适用于推荐类查询
-
-        Args:
-            query: 用户查询
-            context_docs: 上下文文档列表
-
-        Returns:
-            列表式回答
-        """
+        """Generate recommendation-style answer with LLM."""
         if not context_docs:
             return "抱歉，没有找到相关的菜品信息。"
 
-        # 提取菜品名称
-        dish_names = []
-        for doc in context_docs:
-            dish_name = doc.metadata.get('dish_name', '未知菜品')
-            if dish_name not in dish_names:
-                dish_names.append(dish_name)
-
-        # 构建简洁的列表回答
-        if len(dish_names) == 1:
-            return f"为您推荐：{dish_names[0]}"
-        elif len(dish_names) <= 3:
-            return f"为您推荐以下菜品：\n" + "\n".join([f"{i+1}. {name}" for i, name in enumerate(dish_names)])
-        else:
-            return f"为您推荐以下菜品：\n" + "\n".join([f"{i+1}. {name}" for i, name in enumerate(dish_names[:3])]) + f"\n\n还有其他 {len(dish_names)-3} 道菜品可供选择。"
-
-    def generate_basic_answer_stream(self, query: str, context_docs: List[Document]):
-        """
-        生成基础回答 - 流式输出
-
-        Args:
-            query: 用户查询
-            context_docs: 上下文文档列表
-
-        Yields:
-            生成的回答片段
-        """
         context = self._build_context(context_docs)
+        prompt = ChatPromptTemplate.from_template(
+            """
+你是一名专业的营养与食谱助手。请基于给定食谱证据，为用户做推荐。
 
-        prompt = ChatPromptTemplate.from_template("""
-你是一位专业的烹饪助手。请根据以下食谱信息回答用户的问题。
+用户问题:
+{question}
 
-用户问题: {question}
-
-相关食谱信息:
+候选食谱证据:
 {context}
 
-请提供详细、实用的回答。如果信息不足，请诚实说明。
+要求:
+1. 只能从证据中出现的菜品里推荐，不要编造新菜品。
+2. 推荐时优先考虑用户约束，例如健康、蛋白质、低油、增肌、早餐/午餐/晚餐等。
+3. 按优先级给出 2-4 个推荐项。
+4. 每个推荐项都要给出简短理由。
+5. 如果这些候选并不能很好满足用户要求，要明确指出，并说明哪个是相对更合适的选择。
 
-回答:""")
-
-        chain = (
-            {"question": RunnablePassthrough(), "context": lambda _: context}
-            | prompt
-            | self.llm
-            | StrOutputParser()
+回答:
+""".strip()
         )
 
-        for chunk in chain.stream(query):
+        chain = prompt | self.llm | StrOutputParser()
+        try:
+            return chain.invoke({"question": query, "context": context})
+        except Exception as exc:
+            logger.warning(f"LLM 推荐生成失败，回退到列表模式: {exc}")
+            return self._fallback_list_answer(context_docs)
+
+    def generate_list_answer_stream(self, query: str, context_docs: List[Document]):
+        """Generate recommendation-style answer with streaming."""
+        if not context_docs:
+            yield "抱歉，没有找到相关的菜品信息。"
+            return
+
+        context = self._build_context(context_docs)
+        prompt = ChatPromptTemplate.from_template(
+            """
+你是一名专业的营养与食谱助手。请基于给定食谱证据，为用户做推荐。
+
+用户问题:
+{question}
+
+候选食谱证据:
+{context}
+
+要求:
+1. 只能从证据中出现的菜品里推荐，不要编造新菜品。
+2. 推荐时优先考虑用户约束，例如健康、蛋白质、低油、增肌、早餐/午餐/晚餐等。
+3. 按优先级给出 2-4 个推荐项。
+4. 每个推荐项都要给出简短理由。
+5. 如果这些候选并不能很好满足用户要求，要明确指出，并说明哪个是相对更合适的选择。
+
+回答:
+""".strip()
+        )
+
+        chain = prompt | self.llm | StrOutputParser()
+        try:
+            for chunk in chain.stream({"question": query, "context": context}):
+                yield chunk
+        except Exception as exc:
+            logger.warning(f"LLM 流式推荐生成失败，回退到列表模式: {exc}")
+            yield self._fallback_list_answer(context_docs)
+
+    def generate_basic_answer_stream(self, query: str, context_docs: List[Document]):
+        """Generate a normal grounded answer with streaming."""
+        context = self._build_context(context_docs)
+        prompt = ChatPromptTemplate.from_template(
+            """
+你是一名专业的食谱问答助手。请严格基于提供的食谱信息回答问题。
+
+用户问题:
+{question}
+
+食谱证据:
+{context}
+
+要求:
+1. 优先直接回答用户问题。
+2. 只能依据证据作答，不要编造菜名、食材或做法。
+3. 如果证据不足，明确说明局限。
+4. 语言简洁、实用。
+
+回答:
+""".strip()
+        )
+
+        chain = prompt | self.llm | StrOutputParser()
+        for chunk in chain.stream({"question": query, "context": context}):
             yield chunk
 
     def generate_step_by_step_answer_stream(self, query: str, context_docs: List[Document]):
-        """
-        生成详细步骤回答 - 流式输出
-
-        Args:
-            query: 用户查询
-            context_docs: 上下文文档列表
-
-        Yields:
-            详细步骤回答片段
-        """
+        """Generate a detailed step-by-step answer with streaming."""
         context = self._build_context(context_docs)
+        prompt = ChatPromptTemplate.from_template(
+            """
+你是一名专业的烹饪导师。请基于给定食谱信息，为用户生成清晰、可执行的回答。
 
-        prompt = ChatPromptTemplate.from_template("""
-你是一位专业的烹饪导师。请根据食谱信息，为用户提供详细的分步骤指导。
+用户问题:
+{question}
 
-用户问题: {question}
-
-相关食谱信息:
+食谱证据:
 {context}
 
-请灵活组织回答，建议包含以下部分（可根据实际内容调整）：
+要求:
+1. 先简短说明推荐或菜品概况。
+2. 如果问题涉及做法，按步骤说明。
+3. 如果问题涉及食材，明确列出关键食材。
+4. 不要编造证据中没有的信息。
+5. 如果信息不完整，直接说明。
 
-## 🥘 菜品介绍
-[简要介绍菜品特点和难度]
-
-## 🛒 所需食材
-[列出主要食材和用量]
-
-## 👨‍🍳 制作步骤
-[详细的分步骤说明，每步包含具体操作和大概所需时间]
-
-## 💡 制作技巧
-[仅在有实用技巧时包含。如果原文的"附加内容"与烹饪无关或为空，可以基于制作步骤总结关键要点，或者完全省略此部分]
-
-注意：
-- 根据实际内容灵活调整结构
-- 不要强行填充无关内容
-- 重点突出实用性和可操作性
-
-回答:""")
-
-        chain = (
-            {"question": RunnablePassthrough(), "context": lambda _: context}
-            | prompt
-            | self.llm
-            | StrOutputParser()
+回答:
+""".strip()
         )
 
-        for chunk in chain.stream(query):
+        chain = prompt | self.llm | StrOutputParser()
+        for chunk in chain.stream({"question": query, "context": context}):
             yield chunk
 
-    def _build_context(self, docs: List[Document], max_length: int = 2000) -> str:
-        """
-        构建上下文字符串
-        
-        Args:
-            docs: 文档列表
-            max_length: 最大长度
-            
-        Returns:
-            格式化的上下文字符串
-        """
+    def _fallback_list_answer(self, context_docs: List[Document]) -> str:
+        dish_names: List[str] = []
+        for doc in context_docs:
+            dish_name = doc.metadata.get("dish_name", "未知菜品")
+            if dish_name not in dish_names:
+                dish_names.append(dish_name)
+
+        if not dish_names:
+            return "抱歉，没有找到相关的菜品信息。"
+
+        return "可参考这些候选菜品：\n" + "\n".join(
+            f"{index + 1}. {dish_name}" for index, dish_name in enumerate(dish_names[:4])
+        )
+
+    def _build_context(self, docs: List[Document], max_length: int = 2800) -> str:
+        """Build context string from retrieved documents."""
         if not docs:
             return "暂无相关食谱信息。"
-        
+
         context_parts = []
         current_length = 0
-        
-        for i, doc in enumerate(docs, 1):
-            # 添加元数据信息
-            metadata_info = f"【食谱 {i}】"
-            if 'dish_name' in doc.metadata:
-                metadata_info += f" {doc.metadata['dish_name']}"
-            if 'category' in doc.metadata:
-                metadata_info += f" | 分类: {doc.metadata['category']}"
-            if 'difficulty' in doc.metadata:
-                metadata_info += f" | 难度: {doc.metadata['difficulty']}"
-            
-            # 构建文档文本
-            doc_text = f"{metadata_info}\n{doc.page_content}\n"
-            
-            # 检查长度限制
+
+        for index, doc in enumerate(docs, 1):
+            metadata_parts = [f"【食谱 {index}】"]
+            if "dish_name" in doc.metadata:
+                metadata_parts.append(doc.metadata["dish_name"])
+            if "category" in doc.metadata:
+                metadata_parts.append(f"分类: {doc.metadata['category']}")
+            if "difficulty" in doc.metadata:
+                metadata_parts.append(f"难度: {doc.metadata['difficulty']}")
+
+            doc_text = " | ".join(metadata_parts) + "\n" + doc.page_content + "\n"
             if current_length + len(doc_text) > max_length:
                 break
-            
+
             context_parts.append(doc_text)
             current_length += len(doc_text)
-        
-        return "\n" + "="*50 + "\n".join(context_parts)
+
+        return "\n" + "=" * 50 + "\n".join(context_parts)
