@@ -1,49 +1,64 @@
 """
-RAG系统配置文件
+Configuration for the C8 RAG system.
 """
 
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Any, Dict
+
 
 @dataclass
 class RAGConfig:
-    """RAG系统配置类"""
+    """Configuration for retrieval, generation, and evaluation."""
 
-    # 路径配置
     data_path: str = "../../data/C8/cook"
     index_save_path: str = "./vector_index"
+    evaluation_reports_dir: str = "./evaluation_reports"
+    answer_eval_log_path: str = "./evaluation_reports/answer_evaluation_log.jsonl"
+    answer_eval_table_path: str = "./evaluation_reports/live_evaluations.csv"
+    performance_log_path: str = "./performance_log.jsonl"
+    semantic_cache_enabled: bool = False
+    semantic_cache_similarity_threshold: float = 0.88
+    semantic_cache_max_entries: int = 128
+    semantic_cache_embedding_model: str = "BAAI/bge-small-zh-v1.5"
 
-    # 模型配置
     embedding_model: str = "BAAI/bge-small-zh-v1.5"
     llm_model: str = "kimi-k2-0711-preview"
+    judge_llm_model: str = "kimi-k2.5"
+    judge_temperature: float = 0.6
+    judge_max_tokens: int = 4096
+    judge_thinking_type: str = "disabled"
 
-    # 检索配置
     top_k: int = 3
 
-    # 生成配置
     temperature: float = 0.1
     max_tokens: int = 2048
 
-    def __post_init__(self):
-        """初始化后的处理"""
-        pass
-    
     @classmethod
-    def from_dict(cls, config_dict: Dict[str, Any]) -> 'RAGConfig':
-        """从字典创建配置对象"""
+    def from_dict(cls, config_dict: Dict[str, Any]) -> "RAGConfig":
         return cls(**config_dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典"""
         return {
-            'data_path': self.data_path,
-            'index_save_path': self.index_save_path,
-            'embedding_model': self.embedding_model,
-            'llm_model': self.llm_model,
-            'top_k': self.top_k,
-            'temperature': self.temperature,
-            'max_tokens': self.max_tokens
+            "data_path": self.data_path,
+            "index_save_path": self.index_save_path,
+            "evaluation_reports_dir": self.evaluation_reports_dir,
+            "answer_eval_log_path": self.answer_eval_log_path,
+            "answer_eval_table_path": self.answer_eval_table_path,
+            "performance_log_path": self.performance_log_path,
+            "semantic_cache_enabled": self.semantic_cache_enabled,
+            "semantic_cache_similarity_threshold": self.semantic_cache_similarity_threshold,
+            "semantic_cache_max_entries": self.semantic_cache_max_entries,
+            "semantic_cache_embedding_model": self.semantic_cache_embedding_model,
+            "embedding_model": self.embedding_model,
+            "llm_model": self.llm_model,
+            "judge_llm_model": self.judge_llm_model,
+            "judge_temperature": self.judge_temperature,
+            "judge_max_tokens": self.judge_max_tokens,
+            "judge_thinking_type": self.judge_thinking_type,
+            "top_k": self.top_k,
+            "temperature": self.temperature,
+            "max_tokens": self.max_tokens,
         }
 
-# 默认配置实例
+
 DEFAULT_CONFIG = RAGConfig()

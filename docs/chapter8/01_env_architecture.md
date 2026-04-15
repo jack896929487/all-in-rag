@@ -161,10 +161,16 @@ flowchart TD
     M -->|detail查询| O[📝 分步指导模式<br/>config.llm_model<br/>详细步骤]
     M -->|general查询| P[💬 基础回答模式<br/>config.temperature<br/>一般信息]
     
-    %% 输出结果
-    N --> Q[✨ 返回结果]
-    O --> Q
-    P --> Q
+    %% 在线评估与输出
+    N --> EVAL_PREP[📦 汇总评估输入<br/>问题+答案+检索证据]
+    O --> EVAL_PREP
+    P --> EVAL_PREP
+    EVAL_PREP --> R1[📈 检索质量评估<br/>Recall / Precision / MRR]
+    EVAL_PREP --> R2[⚖️ LLM-as-Judge<br/>config.judge_llm_model]
+    R2 --> R3[🧾 生成质量评分<br/>事实准确性 / 忠实度 / 相关性]
+    R1 --> REPORT[📝 评估结果落盘<br/>JSONL / CSV]
+    R3 --> REPORT
+    REPORT --> Q[✨ 返回结果并展示评估]
     
     %% 数据准备子流程
     subgraph DataPrep [📚 数据准备模块]
@@ -180,6 +186,22 @@ flowchart TD
         V --> W[📊 FAISS向量索引]
         W --> X[💾 索引持久化<br/>config.index_save_path]
     end
+
+    %% 评估子流程
+    subgraph EvalModule [🧪 在线评估模块]
+        EVAL_PREP -.-> EA
+        EVAL_PREP -.-> ED
+        EA[📚 候选菜品目录] --> EB[🎯 理论相关菜品判定]
+        EB --> EC[📈 检索指标计算<br/>Recall / Precision / MRR]
+        ED[🧱 检索证据上下文构建] --> EE{⚖️ Judge 是否可用}
+        EE -->|是| EF[🤖 Judge LLM<br/>MoonshotChat]
+        EE -->|否| EG[🛟 启发式回退]
+        EF --> EH[🧾 三维评分 JSON<br/>事实准确性 / 忠实度 / 相关性]
+        EG --> EH
+        EC --> EI[💾 answer_evaluation_log.jsonl]
+        EH --> EI
+        EI --> EJ[📊 live_evaluations.csv]
+    end
     
     %% 配置管理子流程
     subgraph ConfigMgmt [⚙️ 配置管理]
@@ -194,6 +216,7 @@ flowchart TD
     ConfigMgmt --> F
     ConfigMgmt --> O
     ConfigMgmt --> P
+    ConfigMgmt --> EvalModule
     
     %% 样式定义
     classDef startup fill:#e3f2fd,stroke:#0277bd,stroke-width:2px
@@ -207,6 +230,7 @@ flowchart TD
     classDef module fill:#f1f8e9,stroke:#33691e,stroke-width:2px
     classDef cache fill:#fff8e1,stroke:#f57c00,stroke-width:2px
     classDef dataflow fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    classDef evaluation fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
     
     %% 应用样式
     class START,INIT startup
@@ -217,8 +241,9 @@ flowchart TD
     class KEEP,REWRITE rewrite
     class F,G,H,I,J,K,L retrieval
     class N,O,P generation
+    class EVAL_PREP,R1,R2,R3,REPORT,EA,EB,EC,ED,EE,EF,EG,EH,EI,EJ evaluation
     class Q output
-    class DataPrep,IndexBuild module
+    class DataPrep,IndexBuild,EvalModule module
     class BUILD_NEW,READY,DataPrepForRetrieval startup
     class CHUNKS dataflow
 ```
@@ -237,7 +262,9 @@ code/C8/
 │   ├── data_preparation.py    # 数据准备模块
 │   ├── index_construction.py  # 索引构建模块
 │   ├── retrieval_optimization.py # 检索优化模块
-│   └── generation_integration.py # 生成集成模块
+│   ├── generation_integration.py # 生成集成模块
+│   ├── evaluation.py          # 检索/生成质量评估模块
+│   └── performance_monitor.py # 性能监控模块
 └── vector_index/              # 向量索引缓存（自动生成）
 ```
 
